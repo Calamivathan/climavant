@@ -44,7 +44,7 @@ for (var i = 0; i <= 23; i++) {
 
 
 city_name="new delhi"
-fetch('http://calamivathan.pythonanywhere.com/?city='+city_name)
+fetch('https://calamivathan.pythonanywhere.com/?city='+city_name)
   .then(response => response.json())
   .then(data => {
     // Access the data and perform operations
