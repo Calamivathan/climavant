@@ -1,6 +1,7 @@
 // Get the container where the divs will be appended
 var container = document.querySelector('.section-3-day-data-container');
 var json_full_data = {};
+var original_hour_data_index=0;
 // Loop 24 times to create and append the divs
 for (var i = 0; i <= 23; i++) {
   // Create a new div element
@@ -72,9 +73,30 @@ function update_values() {
     // applying the backgroung to the body
     document.body.style.backgroundImage = "url('"+json_full_data[1][0].urls.full +"')";
     
-    for (var i = 0; i <= 23; i++) {
-        document.getElementsByClassName('section-3-hour-data-time-text hour-data-time-text-index-' + i)[0].textContent = json_full_data[0].forecast.forecastday[0].hour[i].time.split(' ')[1];
-        document.getElementsByClassName('section-3-hour-data-temp-text hour-data-temp-text-index-' + i)[0].textContent = json_full_data[0].forecast.forecastday[0].hour[i].temp_c+"°C" ;
-        document.getElementsByClassName('section-3-hour-data-wind-speed-text hour-data-wind-speed-text-index-' + i)[0].textContent ="Wind Speed " + json_full_data[0].forecast.forecastday[0].hour[i].wind_kph+"Kph";
+    update_hour_data_values();
+}
+function change_hour_data(next,prev){
+  console.log("next prev values : "+next,prev);
+  if(prev == 1){
+    original_hour_data_index = original_hour_data_index + next - prev;
+    if(original_hour_data_index <0){
+      original_hour_data_index = 9;
     }
+  }
+  if(next=1){
+    original_hour_data_index = original_hour_data_index + next - prev;
+    if(original_hour_data_index >9){
+      original_hour_data_index = 0;
+    }
+  }
+  update_hour_data_values();
+  console.log(original_hour_data_index);
+}
+function update_hour_data_values(){
+  document.getElementsByClassName('section-3-day-name-text')[0].textContent = json_full_data[0].forecast.forecastday[original_hour_data_index].date;
+    for (var i = 0; i <= 23; i++) {
+      document.getElementsByClassName('section-3-hour-data-time-text hour-data-time-text-index-' + i)[0].textContent = json_full_data[0].forecast.forecastday[original_hour_data_index].hour[i].time.split(' ')[1];
+      document.getElementsByClassName('section-3-hour-data-temp-text hour-data-temp-text-index-' + i)[0].textContent = json_full_data[0].forecast.forecastday[original_hour_data_index].hour[i].temp_c+"°C" ;
+      document.getElementsByClassName('section-3-hour-data-wind-speed-text hour-data-wind-speed-text-index-' + i)[0].textContent ="Wind Speed " + json_full_data[0].forecast.forecastday[original_hour_data_index].hour[i].wind_kph+"Kph";
+  }
 }
